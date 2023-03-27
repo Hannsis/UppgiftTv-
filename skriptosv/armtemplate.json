@@ -1,0 +1,470 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "StorageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue": "BobbenBlobb"
+        },
+
+        "BastionName": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue":"BastionHost"
+        },
+
+        "WebServerName": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue":"WebServer"
+
+        },
+
+        "AppServerName": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue":"AppServer"
+
+        },
+        
+        "VmSize": 
+        {
+            "type": "string",
+            "defaultValue": "Standard_B1ls",
+            "metadata": {
+                "description": "Compute size"
+            }
+        },
+
+        "AdminUsername": 
+        {
+            "type": "string",
+            "defaultValue": "azureuser",
+            "metadata": {
+                "description": "Admin username for VM"
+            }
+        },
+      
+        "DestinationPortRangeB": 
+        {
+            "type": "string",
+            "defaultValue": "22"
+           
+        },   
+        
+        "DestinationPortRangeA": 
+        {
+            "type": "string",
+            "defaultValue": "5000"
+           
+        },   
+        
+        "DestinationPortRangeW": 
+        {
+            "type": "string",
+            "defaultValue": "80"
+           
+        },  
+
+        "AdminPublicKey": 
+        {
+        "type": "string",
+        "metadata": {
+        "description": "Specifies the SSH rsa public key file as a string. Use \"ssh-keygen -t rsa -b 2048\" to generate your SSH key pairs."
+        }
+        }
+    },
+    "functions": [],
+
+    "variables": {
+
+        "uniqueNSGB": "[concat(parameters('BastionName'), '-Nsg')]",
+        "uniqueNSGW": "[concat(parameters('WebServerName'), '-Nsg')]",
+        "uniqueNSGA": "[concat(parameters('AppServerName'), '-Nsg')]",
+
+        "uniquePublicIPB": "[concat(parameters('BastionName'), '-PublicIP')]",
+        "uniquePublicIPW": "[concat(parameters('WebServerName'), '-PublicIP')]",
+        "uniquePublicIPA": "[concat(parameters('AppServerName'), '-PublicIP')]",
+
+        "uniqueVirtualNET": "[concat(resourceGroup().name, '-VNET')]",
+      
+        
+        "uniqueSubnet": "[concat(resourceGroup().name, '-SubNet')]",
+        
+        "uniqueNetInterfaceB": "[concat(parameters('BastionName'), '-NIC')]",
+        "uniqueNetInterfaceW": "[concat(parameters('WebServerName'), '-NIC')]",
+        "uniqueNetInterfaceA": "[concat(parameters('AppServerName'), '-NIC')]",
+
+        "DiskNameB": "[concat(parameters('BastionName'), '-Disk')]",
+        "DiskNameW": "[concat(parameters('WebServerName'), '-Disk')]",
+        "DiskNameA": "[concat(parameters('AppServerName'), '-Disk')]",
+
+        "DnsNameB": "[toLower(concat(parameters('BastionName'), uniqueString(resourceGroup().id)))]",
+        "DnsNameW": "[toLower(concat(parameters('WebServerName'), uniqueString(resourceGroup().id)))]",
+        "DnsNameA": "[toLower(concat(parameters('AppServerName'), uniqueString(resourceGroup().id)))]",
+
+        "uniqueASGname": "[concat(resourceGroup().name, '-ASG')]"
+
+    },
+    "resources": [{
+        "name": "[parameters('StorageAccountName')]",
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2021-04-01",
+        "location": "[resourceGroup().location]",
+        "sku": {
+            "name": "Standard_LRS"
+        },
+        "kind": "Storage"
+    },
+    //storage acc ^
+
+    {
+    "name": "[variables('uniqueASGname')]",
+    "type": "Microsoft.Network/applicationSecurityGroups",
+    "apiVersion": "2020-11-01",
+    "location": "[resourceGroup().location]",
+    "tags": {},
+    "properties": {}
+    },
+    //ASG ^
+
+
+    {
+        "name": "[variables('uniquePublicIPB')]",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "publicIPAllocationMethod": "Dynamic",
+            "dnsSettings": {
+                "domainNameLabel": "[variables('DnsNameB')]"
+            }
+        }
+    },
+    {
+        "name": "[variables('uniquePublicIPW')]",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "publicIPAllocationMethod": "Dynamic",
+            "dnsSettings": {
+                "domainNameLabel": "[variables('DnsNameW')]"
+            }
+        }
+    },
+     {
+        "name": "[variables('uniquePublicIPA')]",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "publicIPAllocationMethod": "Dynamic",
+            "dnsSettings": {
+                "domainNameLabel": "[variables('DnsNameA')]"
+            }
+        }
+    },
+//public IP ^
+
+    {
+        "name": "[variables('uniqueNSGB')]",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "securityRules": [
+                {
+                    "name": "nsgRule1",
+                    "properties": {
+                        "description": "description",
+                        "protocol": "Tcp",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "[parameters('DestinationPortRangeB')]",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 100,
+                        "direction": "Inbound"
+                    }
+                }
+            ]
+        }
+    },
+     {
+        "name": "[variables('uniqueNSGA')]",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "securityRules": [
+                {
+                    "name": "nsgRule1",
+                    "properties": {
+                        "description": "description",
+                        "protocol": "Tcp",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "[parameters('DestinationPortRangeA')]",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 100,
+                        "direction": "Inbound"
+                    }
+                }
+            ]
+        }
+    },
+     {
+        "name": "[variables('uniqueNSGW')]",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+            "securityRules": [
+                {
+                    "name": "nsgRule1",
+                    "properties": {
+                        "description": "description",
+                        "protocol": "Tcp",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "[parameters('DestinationPortRangeW')]",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 100,
+                        "direction": "Inbound"
+                    }
+                }
+            ]
+        }
+    },
+//NSG ^
+
+    {
+        "name": "[variables('uniqueVirtualNET')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGB'))]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGW'))]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGA'))]"
+        ],
+        "properties": {
+            "addressSpace": {
+                "addressPrefixes": [
+                    "10.0.0.0/16"
+                ]
+            },
+            "subnets": [
+                {
+                    "name": "[variables('uniqueSubnet')]",
+                    "properties": {
+                        "addressPrefix": "10.0.0.0/24",
+                        "networkSecurityGroup": {
+                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGA'),variables('uniqueNSGB'),variables('uniqueNSGW'))]"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+//VNET ^
+
+    {
+        "name": "[variables('uniqueNetInterfaceB')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "apiVersion": "2020-11-01",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'), variables('uniquePublicIPB'), variables('uniquePublicIPW'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
+            "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'))]"
+        ],
+        "tags": {
+            "displayName": "ubuntuVM1-NetworkInterface"
+        },
+        "properties": {
+            "ipConfigurations": [
+                {
+                    "name": "ipConfig1",
+                    "properties": {
+                        "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'), variables('uniquePublicIPB'), variables('uniquePublicIPW'))]"
+                        },
+                        "subnet": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
+                        },
+                        "applicationSecurityGroups": [
+                                {
+                            "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]"
+                                }
+                            ]
+                    
+                    }
+                }
+            ]
+        }
+    },
+//NIC ^
+    {
+        "name": "[parameters('BastionName')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2021-03-01",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+        ],
+        "tags": {
+            "displayName": "ubuntuVM1"
+        },
+        "properties": {
+            "hardwareProfile": {
+                "vmSize": "Standard_A2_v2"
+            },
+            "osProfile": {
+                "computerName": "ubuntuVM1",
+                "adminUsername": "adminUsername",
+                "adminPassword": "adminPassword"
+            },
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "Canonical",
+                    "offer": "UbuntuServer",
+                    "sku": "16.04-LTS",
+                    "version": "latest"
+                },
+                "osDisk": {
+                    "name": "ubuntuVM1-OSDisk",
+                    "caching": "ReadWrite",
+                    "createOption": "FromImage"
+                }
+            },
+            "networkProfile": {
+                "networkInterfaces": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+                    }
+                ]
+            },
+            "diagnosticsProfile": {
+                "bootDiagnostics": {
+                    "enabled": true,
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('ubuntuVM1storage'))).primaryEndpoints.blob]"
+                }
+            }
+        }
+    },
+    {
+        "name": "[parameters('AppServerName')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2021-03-01",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+        ],
+        "tags": {
+            "displayName": "ubuntuVM1"
+        },
+        "properties": {
+            "hardwareProfile": {
+                "vmSize": "Standard_A2_v2"
+            },
+            "osProfile": {
+                "computerName": "ubuntuVM1",
+                "adminUsername": "adminUsername",
+                "adminPassword": "adminPassword"
+            },
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "Canonical",
+                    "offer": "UbuntuServer",
+                    "sku": "16.04-LTS",
+                    "version": "latest"
+                },
+                "osDisk": {
+                    "name": "ubuntuVM1-OSDisk",
+                    "caching": "ReadWrite",
+                    "createOption": "FromImage"
+                }
+            },
+            "networkProfile": {
+                "networkInterfaces": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+                    }
+                ]
+            },
+            "diagnosticsProfile": {
+                "bootDiagnostics": {
+                    "enabled": true,
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('ubuntuVM1storage'))).primaryEndpoints.blob]"
+                }
+            }
+        }
+    },
+    {
+        "name": "[parameters('WebServerName')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2021-03-01",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+        ],
+        "tags": {
+            "displayName": "ubuntuVM1"
+        },
+        "properties": {
+            "hardwareProfile": {
+                "vmSize": "Standard_A2_v2"
+            },
+            "osProfile": {
+                "computerName": "ubuntuVM1",
+                "adminUsername": "adminUsername",
+                "adminPassword": "adminPassword"
+            },
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "Canonical",
+                    "offer": "UbuntuServer",
+                    "sku": "16.04-LTS",
+                    "version": "latest"
+                },
+                "osDisk": {
+                    "name": "ubuntuVM1-OSDisk",
+                    "caching": "ReadWrite",
+                    "createOption": "FromImage"
+                }
+            },
+            "networkProfile": {
+                "networkInterfaces": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+                    }
+                ]
+            },
+            "diagnosticsProfile": {
+                "bootDiagnostics": {
+                    "enabled": true,
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('ubuntuVM1storage'))).primaryEndpoints.blob]"
+                }
+            }
+        }
+    }
+    ],
+
+    
+    "outputs": {}
+}
