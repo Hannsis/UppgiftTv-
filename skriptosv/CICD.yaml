@@ -16,18 +16,22 @@ jobs:
         dotnet-version: 7.0.x
     - name: Build
       run: dotnet build
-    - name: Build
+    - name: Publish
       run: dotnet publish -o ${{env.DOTNET_ROOT}}/publish
     - name: Upload artifacts to Github Artifact Store
       uses: actions/upload-artifact@v3
       with:
         name: my-artifacts
         path: ${{env.DOTNET_ROOT}}/publish
-      deploy:
-        runs-on: self-hosted
-        needs: Build
-        steps:
-         - name: Download artifacts to VM
-           uses: actions/download-artifact@v3
-           with:
-             name: my-artifacts
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Download artifacts to VM
+        uses: actions/download-artifact@v3
+        with:
+          name: my-artifacts
+
+      
+
