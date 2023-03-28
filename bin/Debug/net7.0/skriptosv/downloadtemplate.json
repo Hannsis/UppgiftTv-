@@ -2,15 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-   
-      "storageAccountName": {
-        "type": "string",
-        "defaultValue":"blobbenbob",
-        "metadata": {
-          "description": "Specifies the name of the Azure Storage account."
-        }
-
-        },
           "containerName": {
         "type": "string",
         "defaultValue": "containerblobb",
@@ -106,7 +97,9 @@
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "storageAccountName": "[toLower(concat('blob', uniqueString(resourceGroup().name)))]"
+    },
     "resources": 
     [
         //storage account
@@ -114,7 +107,7 @@
       {
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2022-05-01",
-        "name": "[parameters('storageAccountName')]",
+        "name": "[variables('storageAccountName')]",
         "location": "[parameters('location')]",
         "sku": {
           "name": "Standard_LRS"
@@ -127,9 +120,9 @@
       {
         "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
         "apiVersion": "2022-05-01",
-        "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
+        "name": "[format('{0}/default/{1}', variables('storageAccountName'), parameters('containerName'))]",
         "dependsOn": [
-          "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+          "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
         ]
       },
     
