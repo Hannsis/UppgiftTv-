@@ -104,6 +104,7 @@
       
         
         "uniqueSubnet": "[concat(resourceGroup().name, '-SubNet')]",
+        "uniqueSubnet2": "[concat(resourceGroup().name, '-SubNet')]",
         
         "uniqueNetInterfaceB": "[concat(parameters('BastionName'), '-NIC')]",
         "uniqueNetInterfaceW": "[concat(parameters('WebServerName'), '-NIC')]",
@@ -265,7 +266,7 @@
         "apiVersion": "2020-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
+           // "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
         ],
         "properties": {
             "addressSpace": {
@@ -273,17 +274,39 @@
                     "10.0.0.0/16"
                 ]
             },
-            "subnets": [
+            "subnets": 
+            [
                 {
                     "name": "[variables('uniqueSubnet')]",
                     "properties": {
                         "addressPrefix": "10.0.0.0/24",
                         "networkSecurityGroup": {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueNSGA'),variables('uniqueNSGB'),variables('uniqueNSGW'))]"
-                        }
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'),variables('uniqueSubnet'))]"
+                        },
+                         "dependsOn": [
+               // "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]"
+            ]
                     }
                 }
+                     //subnets
+        ,{
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-07-01",
+            "name": "[variables('uniqueSubnet2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.0.0.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        }
+                
+                
             ]
+            
         }
     },
 
@@ -294,10 +317,10 @@
         "apiVersion": "2020-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            //"[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'))]",
+            "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]",
             //"[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
-            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueASGname'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGA'))]"
         ],
         "properties": {
             "ipConfigurations": [   
@@ -310,12 +333,12 @@
                         },
                         "subnet": {
                             "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
-                        },
-                        "applicationSecurityGroups": [
+                        }
+                       /* ,"applicationSecurityGroups": [
                                 {
                             "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]"
                                 }
-                            ]
+                            ]*/
                     
                     }
                 }
@@ -330,9 +353,9 @@
         "location": "[resourceGroup().location]",
         "dependsOn": [
             "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPB'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
-            "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'), variables('uniqueSubnet'))]"
+            //"[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGB'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
         ],
         "properties": {
             "ipConfigurations": [
@@ -345,12 +368,12 @@
                         },
                         "subnet": {
                             "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
-                        },
-                        "applicationSecurityGroups": [
+                        }
+                       /* ,"applicationSecurityGroups": [
                                 {
                             "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]"
                                 }
-                            ]
+                            ]*/
                     
                     }
                 }
@@ -365,9 +388,9 @@
         "location": "[resourceGroup().location]",
         "dependsOn": [
             "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPW'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
-            "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'),variables('uniqueVirtualNET'))]"
+           // "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGW'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'),variables('uniqueSubnet'))]"
         ],
         "properties": {
             "ipConfigurations": [
@@ -380,12 +403,12 @@
                         },
                         "subnet": {
                             "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
-                        },
+                        }/*,
                         "applicationSecurityGroups": [
                                 {
                             "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]"
                                 }
-                            ]
+                            ]*/
                     
                     }
                 }
