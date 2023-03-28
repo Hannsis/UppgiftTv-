@@ -23,12 +23,15 @@ jobs:
       with:
         name: my-artifacts
         path: ${{env.DOTNET_ROOT}}/publish
-      deploy:
-        runs-on: self-hosted
-        needs: build
-        steps:
-         - name: Download artifacts to VM
-           uses: actions/download-artifact@v3
-           with:
-             name: my-artifacts
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Download artifacts to VM
+        uses: actions/download-artifact@v3
+        with:
+          name: my-artifacts
+
+      
 
