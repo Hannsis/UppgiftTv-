@@ -1,0 +1,9 @@
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\UppgiftTv-.exe
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\appsettings.Development.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\appsettings.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\skriptosv\armtemplate.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\skriptosv\downloadtemplate.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\UppgiftTv-.dll
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\UppgiftTv-.deps.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\UppgiftTv-.runtimeconfig.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\publish\UppgiftTv-.pdb
