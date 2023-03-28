@@ -3,3 +3,4 @@ packages:
   - nginx
 runcmd:
   - systemctl start nginx
+  - systemctl enable nginx
