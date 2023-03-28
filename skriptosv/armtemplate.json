@@ -120,6 +120,8 @@
         "uniqueASGname": "[concat(resourceGroup().name, '-ASG')]"
 
     },
+
+        //storage acc 
     "resources": [{
         "name": "[parameters('StorageAccountName')]",
         "type": "Microsoft.Storage/storageAccounts",
@@ -130,8 +132,8 @@
         },
         "kind": "Storage"
     },
-    //storage acc ^
 
+    //ASG 
     {
     "name": "[variables('uniqueASGname')]",
     "type": "Microsoft.Network/applicationSecurityGroups",
@@ -140,9 +142,9 @@
     "tags": {},
     "properties": {}
     },
-    //ASG ^
 
 
+//public IP 
     {
         "name": "[variables('uniquePublicIPB')]",
         "type": "Microsoft.Network/publicIPAddresses",
@@ -167,7 +169,8 @@
             }
         }
     },
-     {
+    //behöver appservern den här delen? den ska inte ha pubic ip???
+    {
         "name": "[variables('uniquePublicIPA')]",
         "type": "Microsoft.Network/publicIPAddresses",
         "apiVersion": "2020-11-01",
@@ -179,8 +182,8 @@
             }
         }
     },
-//public IP ^
 
+//NSG 
     {
         "name": "[variables('uniqueNSGB')]",
         "type": "Microsoft.Network/networkSecurityGroups",
@@ -205,7 +208,7 @@
             ]
         }
     },
-     {
+    {
         "name": "[variables('uniqueNSGA')]",
         "type": "Microsoft.Network/networkSecurityGroups",
         "apiVersion": "2020-11-01",
@@ -229,7 +232,7 @@
             ]
         }
     },
-     {
+    {
         "name": "[variables('uniqueNSGW')]",
         "type": "Microsoft.Network/networkSecurityGroups",
         "apiVersion": "2020-11-01",
@@ -253,17 +256,16 @@
             ]
         }
     },
-//NSG ^
 
+
+//VNET 
     {
         "name": "[variables('uniqueVirtualNET')]",
         "type": "Microsoft.Network/virtualNetworks",
         "apiVersion": "2020-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGB'))]",
-            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGW'))]",
-            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGA'))]"
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
         ],
         "properties": {
             "addressSpace": {
@@ -277,25 +279,25 @@
                     "properties": {
                         "addressPrefix": "10.0.0.0/24",
                         "networkSecurityGroup": {
-                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGA'),variables('uniqueNSGB'),variables('uniqueNSGW'))]"
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueNSGA'),variables('uniqueNSGB'),variables('uniqueNSGW'))]"
                         }
                     }
                 }
             ]
         }
     },
-//VNET ^
 
+//NIC 
     {
         "name": "[variables('uniqueNetInterfaceA')]",
         "type": "Microsoft.Network/networkInterfaces",
         "apiVersion": "2020-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
-            "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'))]"
+            //"[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'))]",
+            //"[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueASGname'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
         ],
         "properties": {
             "ipConfigurations": [   
@@ -320,6 +322,7 @@
             ]
         }
     },
+
     {
         "name": "[variables('uniqueNetInterfaceB')]",
         "type": "Microsoft.Network/networkInterfaces",
@@ -329,7 +332,7 @@
             "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPB'))]",
             "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
             "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'))]"
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'), variables('uniqueSubnet'))]"
         ],
         "properties": {
             "ipConfigurations": [
@@ -354,6 +357,7 @@
             ]
         }
     },
+
     {
         "name": "[variables('uniqueNetInterfaceW')]",
         "type": "Microsoft.Network/networkInterfaces",
@@ -363,7 +367,7 @@
             "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPW'))]",
             "[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
             "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'))]"
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueSubnet'),variables('uniqueVirtualNET'))]"
         ],
         "properties": {
             "ipConfigurations": [
@@ -388,7 +392,9 @@
             ]
         }
     },
-//NIC ^
+
+
+//VM 
     {
         "name": "[parameters('BastionName')]",
         "type": "Microsoft.Compute/virtualMachines",
@@ -438,6 +444,7 @@
             }
         }
     },
+
     {
         "name": "[parameters('WebServerName')]",
         "type": "Microsoft.Compute/virtualMachines",
@@ -488,6 +495,7 @@
             }
         }
     },
+
     {
         "name": "[parameters('AppServerName')]",
         "type": "Microsoft.Compute/virtualMachines",
@@ -538,6 +546,7 @@
             }
         }
     }
+
 ],
 
     

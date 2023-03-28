@@ -2,64 +2,68 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachines_Bastion_name": {
-            "defaultValue": "Bastion",
+        "virtualMachines_bastion_name": {
+            "defaultValue": "bastion",
             "type": "String"
         },
-        "sshPublicKeys_Bastion_key_name": {
-            "defaultValue": "Bastion_key",
+        "sshPublicKeys_bastion_key_name": {
+            "defaultValue": "bastion_key",
+            "type": "String"
+        },
+        "virtualMachines_appserver_name": {
+            "defaultValue": "appserver",
             "type": "String"
         },
         "virtualMachines_webserver_name": {
             "defaultValue": "webserver",
             "type": "String"
         },
+        "sshPublicKeys_appserver_key_name": {
+            "defaultValue": "appserver_key",
+            "type": "String"
+        },
         "sshPublicKeys_webserver_key_name": {
             "defaultValue": "webserver_key",
             "type": "String"
         },
-        "publicIPAddresses_Bastion_ip_name": {
-            "defaultValue": "Bastion-ip",
+        "publicIPAddresses_bastion_ip_name": {
+            "defaultValue": "bastion-ip",
+            "type": "String"
+        },
+        "virtualNetworks_bastion_vnet_name": {
+            "defaultValue": "bastion-vnet",
+            "type": "String"
+        },
+        "publicIPAddresses_appserver_ip_name": {
+            "defaultValue": "appserver-ip",
             "type": "String"
         },
         "publicIPAddresses_webserver_ip_name": {
             "defaultValue": "webserver-ip",
             "type": "String"
         },
-        "virtualNetworks_VirtualNetwork_name": {
-            "defaultValue": "VirtualNetwork",
+        "networkInterfaces_bastion492_z1_name": {
+            "defaultValue": "bastion492_z1",
             "type": "String"
         },
-        "networkInterfaces_bastion308_z1_name": {
-            "defaultValue": "bastion308_z1",
+        "networkInterfaces_appserver14_z1_name": {
+            "defaultValue": "appserver14_z1",
             "type": "String"
         },
-        "virtualMachines_appserverussnape_name": {
-            "defaultValue": "appserverussnape",
+        "networkInterfaces_webserver641_z1_name": {
+            "defaultValue": "webserver641_z1",
             "type": "String"
         },
-        "networkInterfaces_webserver603_z1_name": {
-            "defaultValue": "webserver603_z1",
+        "networkSecurityGroups_bastion_nsg_name": {
+            "defaultValue": "bastion-nsg",
             "type": "String"
         },
-        "networkSecurityGroups_Bastion_nsg_name": {
-            "defaultValue": "Bastion-nsg",
-            "type": "String"
-        },
-        "sshPublicKeys_appserverussnape_key_name": {
-            "defaultValue": "appserverussnape_key",
+        "networkSecurityGroups_appserver_nsg_name": {
+            "defaultValue": "appserver-nsg",
             "type": "String"
         },
         "networkSecurityGroups_webserver_nsg_name": {
             "defaultValue": "webserver-nsg",
-            "type": "String"
-        },
-        "networkInterfaces_appserverussnape281_z1_name": {
-            "defaultValue": "appserverussnape281_z1",
-            "type": "String"
-        },
-        "networkSecurityGroups_appserverussnape_nsg_name": {
-            "defaultValue": "appserverussnape-nsg",
             "type": "String"
         }
     },
@@ -68,19 +72,19 @@
         {
             "type": "Microsoft.Compute/sshPublicKeys",
             "apiVersion": "2022-11-01",
-            "name": "[parameters('sshPublicKeys_appserverussnape_key_name')]",
+            "name": "[parameters('sshPublicKeys_appserver_key_name')]",
             "location": "northeurope",
             "properties": {
-                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC00Sew9C2MBWL2wbSRbJuXYRucSYe3OdhQka8AUoXSXDitLB7F9lAjpXI95+3MqsPLIEgKYS3rhe9Bf4Q956TFuQcDrMoaP78DkjeI4nb/9uyJVpfwK+e6qUI+25Nnng6YQ6pWpSKTrFGTLLGSESQME98zPKHCnI0peVVS72eQxSqGeHsahtIay4wTk8QVwleaoGLDU9fpvVu3LEAjnQP6pI6fcfd6Qxzwf2CiYuD5dVxtV5AbwY8Fyrd2MJrq3/r+lsOcv4Q2/aTNOY42V/a2wBhl0bZVSPGUVDwPweKrFdur5Cq9cwAH8Ns4Kgo0cJQXJbyUoyJl8rxkGz14CxL2l6MI/80UO3eXD/x417m30zyCTz2fnMkSr/1x/+GGuX8UIxQ+/MHqLTqDT/Vls3o5VjWvPJcPG+kh+7wvkh8mXQdfWqES+UfkAdjEywVOaSz9jmP/TV8e9XOvqTtMGLz+79u2nL5RE1frOE9zwDzEkR4A4UwtJbkrleT+TIQxUtk= generated-by-azure"
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDS/tlx6jUOMvSUGjRlP1+0DBxy1TDOoRg2zKWhFvba951bm8r4Ya6W0fNmbQ/xHTXLOsmRLbCglYvEY2NaLllHsIhM7p9xryVlND5WR3Xl94rfqc2I4EFw/8s8YzAoKfXwtGBFWU6mNXZVwYFrMHJArVFBKGbACqLDHgymzI8BIMww+eNuugcak/HFGJCEGPSl/z228F34OssOFaFvbpTc5yHE9FkYvDT8qerGx5DSVhXnH8F6TzvQ3AxD9RrS2IdchXybd/3swuisrxJ+PSjjnaW1bsxzSC836HbvYun406nio/wj4jdqzD792sfDBnUQD2uT9h05WhQ/O9B/XyEfNk+Y606ZPCoGzeW/MnfVmCjWs1lGHc88wLbY79KjGPHYi361sIstoOaPdWEq/RgOjARUCj+Lv3pD0XJLBdvn/SzUc1S+pWQfFAvIVSaryFn7jowBgKHH/EJ2Lv/8FlS/KxEJvfryd6c6ZqdGqKWkKthzEFg1WbkdUnhvPGpqPD0= generated-by-azure"
             }
         },
         {
             "type": "Microsoft.Compute/sshPublicKeys",
             "apiVersion": "2022-11-01",
-            "name": "[parameters('sshPublicKeys_Bastion_key_name')]",
+            "name": "[parameters('sshPublicKeys_bastion_key_name')]",
             "location": "northeurope",
             "properties": {
-                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCp0aYI6W55zcMbRa2WvZUqhzACDDazVDLAUMEYhWFEHqFVS2CAWm4WfNaMKi5dNdiHJKtInfjCs4E8cWtvi9Cmy1lM4UsVdh49166eUN3TqsQ0y98g4NaVjZ3paNWMqps0940Ws0PdWaPJhxznLd8Pdu+Nbc+VVZkNT4MykSGmFlmC5fY+n5krzpiWRwCozodls9FZCbdKlFnQ4D8f+9dsuKgV6dlXdnCfVY6w0psS+t5np32J3IXAAfKQYdrKVKpGOSHCATAHt+XEfZXaDDctdBhU1+ycf4W6qHVjrvTaH71tpWMRxpFU4SHbDeo0atLEyV0QjgpwVP/vgWNvSUICiq0oT6RhBhfg12C61sMQB1snT1TqNAmGNqNOb4LAXs0McfnCOxdZbwqeFc1SG3fRjGI7AZgsWPLyK+ydibixRuJADRs6FjBLbeMXJY31ETc+k+wm4dVrckqVigOntIXMJorjLjN1JeEwpAtDAMkWQQNxcpq4Gx+q4RpiiU0ibik= generated-by-azure"
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1s35+ywMhPByD7y51TEXJFhFHsN9FfCMbfn21xl2XINx7qvHDecCNjOC7LpEOkJK0qVVo2Lf7OLzfvDXVuKe6vYvQ3YyI7M1PCCSnFlh4XOtVAUZyRUBF4tQDsTxbBZKtA1B9CUfJYA2dG7TF7KX7WZShHyy0OYmG6hIEWycy/HNprexFhmZcxH4NQRegaT9llKGZm3y/8Fkg63JrxGKVRyjaKc5oh4AG/j3P31q1LwSWcTqcHja0+uUoIotR1tNy2ebuQevucz8//rzF7Mho33+kzlH86gtoN0l+yzyKWsizo0hjJUOYAgauwwx7FpkLfr7kgAyhtC28nAzev6VozBUkpQ46Bg9XUexi9L1JzNLd4aQs7MdA8bw4uJ82XKNeV+BEt4x+wfllJYTh4SHJ9fE9XGgmMse8DYGK72M54/Y2qY/RCobr/U1bHcfxnwcU1NYogURqtmLOVykTnuuBopJdCi86eavlsmg5awcix+X0XvnfHh97vFT4Ri7ngRE= generated-by-azure"
             }
         },
         {
@@ -89,13 +93,26 @@
             "name": "[parameters('sshPublicKeys_webserver_key_name')]",
             "location": "northeurope",
             "properties": {
-                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0ZvYGwHU9LI2PAmRdohYRq+PFhjdDgpn+3XPP4pNUSewpYAaeVBsHuMdn2iNOyg1ENeGl6/ykcqf5kNq6fcEG67qgZ/gjOJcBq/M6K8rieul72XEqa5T/Vso15GYk5zRvNq/uS/zMplJONcCsel3L0Sm1aJKmkTLb5dRJEhS3lwxOkUPGeYYea8OCv77kYS9t1sccDMrCOY9H72cCayh7Irvw9GU+KYhPpjPStuAOfUXCeVSJ/I+X5jZFW47xjx4Z6523hio5uO88oacKtuvSBYBXlmKsYhdsB78PMFV7Et/xNAK+9226W71I8RChM9k/E3HxRNszjU4KS0iJwJy8Rjl3pOJuGIbKbxukQ1XpIFKnEjy+sE+hFsqdRlPSqmiY8vUXXg80ipcScxtAClZ8dBv9Ra/CLss2NU5jcGm5E6P1d1OrOGidbymIikZXntcqn1Rl8UsnD40eTVqIgeC9qGMkrO5OP71B+0HtptU7W9zA1vVa6G5LibhUu8GfkKE= generated-by-azure"
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDXEGgQ0ELGVIRK+3hDQndlnnYwoYAtYVTRr0atp2KHRW0WTdRzTWFSiYfTZ3EqBKi2NnvAZnWx3z/cmB6D1JgiVx05ujKhUV+ywjWLdfNPx7zJOu6GDmrihFv7IIcgF6ncsyxvYNtnoblR9l75VBYKzoPKwyM5nWmB+O1nJ5Yp5o3hz71eOUlma+z/XffGoDMcCJW2lmobIccGcfT4cQOamdBGaygzvoH8MupEUhAfdhqNfkKQxPboz9KBD/8S1le9OI+Plv9HjEtT5p/BfP5Gb+vQiy09DvI1rHNo4XUUL5yJr76TaZrgMNQgcHIAANS/maykhHvhdmWpDNZkIuhmQ9jgtaBdWf4iDyIh71TfYDZg3ne7gCrkzbXzoToKrRRf9RQPHBtiY/4EbFEl3GLZhCo3TlOzJuJ7YQzsn7u7GDRU1p7f9A9bPEa9LPjvYrGAE7KvZvzC737Qqv0xpuUnk1DaBuBnDdquw5r1TaF6ymDQ6qyGCq7eflY6FAvaNT0= generated-by-azure"
             }
         },
+
+        //NSG
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2022-07-01",
+            "name": "[parameters('networkSecurityGroups_appserver_nsg_name')]",
+            "location": "northeurope",
+            "properties": {
+                "securityRules": []
+            }
+        },
+
+        //publicip
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2022-07-01",
-            "name": "[parameters('publicIPAddresses_Bastion_ip_name')]",
+            "name": "[parameters('publicIPAddresses_appserver_ip_name')]",
             "location": "northeurope",
             "sku": {
                 "name": "Standard",
@@ -105,7 +122,27 @@
                 "1"
             ],
             "properties": {
-                "ipAddress": "40.67.242.199",
+                "ipAddress": "20.238.17.77",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-07-01",
+            "name": "[parameters('publicIPAddresses_bastion_ip_name')]",
+            "location": "northeurope",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": [
+                "1"
+            ],
+            "properties": {
+                "ipAddress": "20.238.17.163",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": 4,
@@ -125,20 +162,22 @@
                 "1"
             ],
             "properties": {
-                "ipAddress": "52.155.248.83",
+                "ipAddress": "20.238.18.223",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
         },
+
+        //vm
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-11-01",
-            "name": "[parameters('virtualMachines_appserverussnape_name')]",
+            "name": "[parameters('virtualMachines_appserver_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserverussnape281_z1_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserver14_z1_name'))]"
             ],
             "zones": [
                 "1"
@@ -156,12 +195,12 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_appserverussnape_name'), '_OsDisk_1_578bd5abf3db486d8f31efd35b0295f1')]",
+                        "name": "[concat(parameters('virtualMachines_appserver_name'), '_OsDisk_1_a85861156869413db21c4129b57d5070')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_appserverussnape_name'), '_OsDisk_1_578bd5abf3db486d8f31efd35b0295f1'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_appserver_name'), '_OsDisk_1_a85861156869413db21c4129b57d5070'))]"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -169,7 +208,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachines_appserverussnape_name')]",
+                    "computerName": "[parameters('virtualMachines_appserver_name')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
@@ -177,7 +216,7 @@
                             "publicKeys": [
                                 {
                                     "path": "/home/azureuser/.ssh/authorized_keys",
-                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC00Sew9C2MBWL2wbSRbJuXYRucSYe3OdhQka8AUoXSXDitLB7F9lAjpXI95+3MqsPLIEgKYS3rhe9Bf4Q956TFuQcDrMoaP78DkjeI4nb/9uyJVpfwK+e6qUI+25Nnng6YQ6pWpSKTrFGTLLGSESQME98zPKHCnI0peVVS72eQxSqGeHsahtIay4wTk8QVwleaoGLDU9fpvVu3LEAjnQP6pI6fcfd6Qxzwf2CiYuD5dVxtV5AbwY8Fyrd2MJrq3/r+lsOcv4Q2/aTNOY42V/a2wBhl0bZVSPGUVDwPweKrFdur5Cq9cwAH8Ns4Kgo0cJQXJbyUoyJl8rxkGz14CxL2l6MI/80UO3eXD/x417m30zyCTz2fnMkSr/1x/+GGuX8UIxQ+/MHqLTqDT/Vls3o5VjWvPJcPG+kh+7wvkh8mXQdfWqES+UfkAdjEywVOaSz9jmP/TV8e9XOvqTtMGLz+79u2nL5RE1frOE9zwDzEkR4A4UwtJbkrleT+TIQxUtk= generated-by-azure"
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDS/tlx6jUOMvSUGjRlP1+0DBxy1TDOoRg2zKWhFvba951bm8r4Ya6W0fNmbQ/xHTXLOsmRLbCglYvEY2NaLllHsIhM7p9xryVlND5WR3Xl94rfqc2I4EFw/8s8YzAoKfXwtGBFWU6mNXZVwYFrMHJArVFBKGbACqLDHgymzI8BIMww+eNuugcak/HFGJCEGPSl/z228F34OssOFaFvbpTc5yHE9FkYvDT8qerGx5DSVhXnH8F6TzvQ3AxD9RrS2IdchXybd/3swuisrxJ+PSjjnaW1bsxzSC836HbvYun406nio/wj4jdqzD792sfDBnUQD2uT9h05WhQ/O9B/XyEfNk+Y606ZPCoGzeW/MnfVmCjWs1lGHc88wLbY79KjGPHYi361sIstoOaPdWEq/RgOjARUCj+Lv3pD0XJLBdvn/SzUc1S+pWQfFAvIVSaryFn7jowBgKHH/EJ2Lv/8FlS/KxEJvfryd6c6ZqdGqKWkKthzEFg1WbkdUnhvPGpqPD0= generated-by-azure"
                                 }
                             ]
                         },
@@ -202,7 +241,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserverussnape281_z1_name'))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserver14_z1_name'))]",
                             "properties": {
                                 "deleteOption": "Detach"
                             }
@@ -219,10 +258,10 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2022-11-01",
-            "name": "[parameters('virtualMachines_Bastion_name')]",
+            "name": "[parameters('virtualMachines_bastion_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion308_z1_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion492_z1_name'))]"
             ],
             "zones": [
                 "1"
@@ -240,12 +279,12 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_Bastion_name'), '_OsDisk_1_0dbc68f3b2f941b292116b63c314bc04')]",
+                        "name": "[concat(parameters('virtualMachines_bastion_name'), '_OsDisk_1_001eddd7236e4518b26b396027fd6477')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_Bastion_name'), '_OsDisk_1_0dbc68f3b2f941b292116b63c314bc04'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_bastion_name'), '_OsDisk_1_001eddd7236e4518b26b396027fd6477'))]"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -253,7 +292,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachines_Bastion_name')]",
+                    "computerName": "[parameters('virtualMachines_bastion_name')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
@@ -261,7 +300,7 @@
                             "publicKeys": [
                                 {
                                     "path": "/home/azureuser/.ssh/authorized_keys",
-                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCp0aYI6W55zcMbRa2WvZUqhzACDDazVDLAUMEYhWFEHqFVS2CAWm4WfNaMKi5dNdiHJKtInfjCs4E8cWtvi9Cmy1lM4UsVdh49166eUN3TqsQ0y98g4NaVjZ3paNWMqps0940Ws0PdWaPJhxznLd8Pdu+Nbc+VVZkNT4MykSGmFlmC5fY+n5krzpiWRwCozodls9FZCbdKlFnQ4D8f+9dsuKgV6dlXdnCfVY6w0psS+t5np32J3IXAAfKQYdrKVKpGOSHCATAHt+XEfZXaDDctdBhU1+ycf4W6qHVjrvTaH71tpWMRxpFU4SHbDeo0atLEyV0QjgpwVP/vgWNvSUICiq0oT6RhBhfg12C61sMQB1snT1TqNAmGNqNOb4LAXs0McfnCOxdZbwqeFc1SG3fRjGI7AZgsWPLyK+ydibixRuJADRs6FjBLbeMXJY31ETc+k+wm4dVrckqVigOntIXMJorjLjN1JeEwpAtDAMkWQQNxcpq4Gx+q4RpiiU0ibik= generated-by-azure"
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1s35+ywMhPByD7y51TEXJFhFHsN9FfCMbfn21xl2XINx7qvHDecCNjOC7LpEOkJK0qVVo2Lf7OLzfvDXVuKe6vYvQ3YyI7M1PCCSnFlh4XOtVAUZyRUBF4tQDsTxbBZKtA1B9CUfJYA2dG7TF7KX7WZShHyy0OYmG6hIEWycy/HNprexFhmZcxH4NQRegaT9llKGZm3y/8Fkg63JrxGKVRyjaKc5oh4AG/j3P31q1LwSWcTqcHja0+uUoIotR1tNy2ebuQevucz8//rzF7Mho33+kzlH86gtoN0l+yzyKWsizo0hjJUOYAgauwwx7FpkLfr7kgAyhtC28nAzev6VozBUkpQ46Bg9XUexi9L1JzNLd4aQs7MdA8bw4uJ82XKNeV+BEt4x+wfllJYTh4SHJ9fE9XGgmMse8DYGK72M54/Y2qY/RCobr/U1bHcfxnwcU1NYogURqtmLOVykTnuuBopJdCi86eavlsmg5awcix+X0XvnfHh97vFT4Ri7ngRE= generated-by-azure"
                                 }
                             ]
                         },
@@ -286,7 +325,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion308_z1_name'))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion492_z1_name'))]",
                             "properties": {
                                 "deleteOption": "Detach"
                             }
@@ -306,7 +345,7 @@
             "name": "[parameters('virtualMachines_webserver_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver603_z1_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver641_z1_name'))]"
             ],
             "zones": [
                 "1"
@@ -324,12 +363,12 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_f62df0a781864ecb9677a9a9b679b7fc')]",
+                        "name": "[concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_1792399cf09c4c4a9f56bd628c4d2fa8')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_f62df0a781864ecb9677a9a9b679b7fc'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_1792399cf09c4c4a9f56bd628c4d2fa8'))]"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -345,7 +384,7 @@
                             "publicKeys": [
                                 {
                                     "path": "/home/azureuser/.ssh/authorized_keys",
-                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0ZvYGwHU9LI2PAmRdohYRq+PFhjdDgpn+3XPP4pNUSewpYAaeVBsHuMdn2iNOyg1ENeGl6/ykcqf5kNq6fcEG67qgZ/gjOJcBq/M6K8rieul72XEqa5T/Vso15GYk5zRvNq/uS/zMplJONcCsel3L0Sm1aJKmkTLb5dRJEhS3lwxOkUPGeYYea8OCv77kYS9t1sccDMrCOY9H72cCayh7Irvw9GU+KYhPpjPStuAOfUXCeVSJ/I+X5jZFW47xjx4Z6523hio5uO88oacKtuvSBYBXlmKsYhdsB78PMFV7Et/xNAK+9226W71I8RChM9k/E3HxRNszjU4KS0iJwJy8Rjl3pOJuGIbKbxukQ1XpIFKnEjy+sE+hFsqdRlPSqmiY8vUXXg80ipcScxtAClZ8dBv9Ra/CLss2NU5jcGm5E6P1d1OrOGidbymIikZXntcqn1Rl8UsnD40eTVqIgeC9qGMkrO5OP71B+0HtptU7W9zA1vVa6G5LibhUu8GfkKE= generated-by-azure"
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDXEGgQ0ELGVIRK+3hDQndlnnYwoYAtYVTRr0atp2KHRW0WTdRzTWFSiYfTZ3EqBKi2NnvAZnWx3z/cmB6D1JgiVx05ujKhUV+ywjWLdfNPx7zJOu6GDmrihFv7IIcgF6ncsyxvYNtnoblR9l75VBYKzoPKwyM5nWmB+O1nJ5Yp5o3hz71eOUlma+z/XffGoDMcCJW2lmobIccGcfT4cQOamdBGaygzvoH8MupEUhAfdhqNfkKQxPboz9KBD/8S1le9OI+Plv9HjEtT5p/BfP5Gb+vQiy09DvI1rHNo4XUUL5yJr76TaZrgMNQgcHIAANS/maykhHvhdmWpDNZkIuhmQ9jgtaBdWf4iDyIh71TfYDZg3ne7gCrkzbXzoToKrRRf9RQPHBtiY/4EbFEl3GLZhCo3TlOzJuJ7YQzsn7u7GDRU1p7f9A9bPEa9LPjvYrGAE7KvZvzC737Qqv0xpuUnk1DaBuBnDdquw5r1TaF6ymDQ6qyGCq7eflY6FAvaNT0= generated-by-azure"
                                 }
                             ]
                         },
@@ -370,7 +409,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver603_z1_name'))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver641_z1_name'))]",
                             "properties": {
                                 "deleteOption": "Detach"
                             }
@@ -385,50 +424,19 @@
             }
         },
         {
+            //nsg
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2022-07-01",
-            "name": "[parameters('networkSecurityGroups_appserverussnape_nsg_name')]",
+            "name": "[parameters('networkSecurityGroups_bastion_nsg_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_appserverussnape_nsg_name'), 'SSH')]"
+               // "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_bastion_nsg_name'), 'SSH')]"
             ],
             "properties": {
                 "securityRules": [
                     {
                         "name": "SSH",
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_appserverussnape_nsg_name'), 'SSH')]",
-                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-                        "properties": {
-                            "protocol": "TCP",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "22",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 300,
-                            "direction": "Inbound",
-                            "sourcePortRanges": [],
-                            "destinationPortRanges": [],
-                            "sourceAddressPrefixes": [],
-                            "destinationAddressPrefixes": []
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2022-07-01",
-            "name": "[parameters('networkSecurityGroups_Bastion_nsg_name')]",
-            "location": "northeurope",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_Bastion_nsg_name'), 'SSH')]"
-            ],
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "SSH",
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_Bastion_nsg_name'), 'SSH')]",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_bastion_nsg_name'), 'SSH')]",
                         "type": "Microsoft.Network/networkSecurityGroups/securityRules",
                         "properties": {
                             "protocol": "TCP",
@@ -454,7 +462,7 @@
             "name": "[parameters('networkSecurityGroups_webserver_nsg_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_webserver_nsg_name'), 'HTTP')]"
+              //  "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_webserver_nsg_name'), 'HTTP')]"
             ],
             "properties": {
                 "securityRules": [
@@ -505,9 +513,9 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups/securityRules",
             "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('networkSecurityGroups_appserverussnape_nsg_name'), '/SSH')]",
+            "name": "[concat(parameters('networkSecurityGroups_bastion_nsg_name'), '/SSH')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_appserverussnape_nsg_name'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_bastion_nsg_name'))]"
             ],
             "properties": {
                 "protocol": "TCP",
@@ -524,35 +532,15 @@
                 "destinationAddressPrefixes": []
             }
         },
-        {
-            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-            "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('networkSecurityGroups_Bastion_nsg_name'), '/SSH')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_Bastion_nsg_name'))]"
-            ],
-            "properties": {
-                "protocol": "TCP",
-                "sourcePortRange": "*",
-                "destinationPortRange": "22",
-                "sourceAddressPrefix": "*",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 300,
-                "direction": "Inbound",
-                "sourcePortRanges": [],
-                "destinationPortRanges": [],
-                "sourceAddressPrefixes": [],
-                "destinationAddressPrefixes": []
-            }
-        },
+
+        //VNET
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2022-07-01",
-            "name": "[parameters('virtualNetworks_VirtualNetwork_name')]",
+            "name": "[parameters('virtualNetworks_bastion_vnet_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]"
+               // "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]"
             ],
             "properties": {
                 "addressSpace": {
@@ -562,8 +550,8 @@
                 },
                 "subnets": [
                     {
-                        "name": "bastionsubnet",
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]",
+                        "name": "default",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24",
                             "delegations": [],
@@ -580,9 +568,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2022-07-01",
-            "name": "[concat(parameters('virtualNetworks_VirtualNetwork_name'), '/bastionsubnet')]",
+            "name": "[concat(parameters('virtualNetworks_bastion_vnet_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_VirtualNetwork_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_bastion_vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.0.0.0/24",
@@ -594,78 +582,37 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2022-07-01",
-            "name": "[parameters('networkInterfaces_appserverussnape281_z1_name')]",
+            "name": "[parameters('networkInterfaces_appserver14_z1_name')]",
             "location": "northeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_appserverussnape_nsg_name'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_appserver_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_appserver_nsg_name'))]"
             ],
             "kind": "Regular",
             "properties": {
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
-                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserverussnape281_z1_name')), '/ipConfigurations/ipconfig1')]",
-                        "etag": "W/\"7a148b22-feeb-44ac-a1e6-50dfad10d8d3\"",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserver14_z1_name')), '/ipConfigurations/ipconfig1')]",
+                        "etag": "W/\"d82948a5-ca4d-4bf9-8b94-43f37b54975a\"",
                         "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
                         "properties": {
                             "provisioningState": "Succeeded",
                             "privateIPAddress": "10.0.0.6",
                             "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]"
-                            },
-                            "primary": true,
-                            "privateIPAddressVersion": "IPv4"
-                        }
-                    }
-                ],
-                "dnsSettings": {
-                    "dnsServers": []
-                },
-                "enableAcceleratedNetworking": false,
-                "enableIPForwarding": false,
-                "disableTcpStateTracking": false,
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_appserverussnape_nsg_name'))]"
-                },
-                "nicType": "Standard"
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkInterfaces",
-            "apiVersion": "2022-07-01",
-            "name": "[parameters('networkInterfaces_bastion308_z1_name')]",
-            "location": "northeurope",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_Bastion_ip_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_Bastion_nsg_name'))]"
-            ],
-            "kind": "Regular",
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion308_z1_name')), '/ipConfigurations/ipconfig1')]",
-                        "etag": "W/\"e8e0ecf4-e2c9-4a5b-a987-2a3e4eb0c10c\"",
-                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
-                        "properties": {
-                            "provisioningState": "Succeeded",
-                            "privateIPAddress": "10.0.0.4",
-                            "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "name": "Bastion-ip",
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_Bastion_ip_name'))]",
+                                "name": "appserver-ip",
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_appserver_ip_name'))]",
                                 "properties": {
                                     "provisioningState": "Succeeded",
-                                    "resourceGuid": "323bf640-3305-4a39-a97b-35e1e09ce5a5",
+                                    "resourceGuid": "8c5c443c-c3b7-4d74-8a2c-65182ea9ff42",
                                     "publicIPAddressVersion": "IPv4",
                                     "publicIPAllocationMethod": "Dynamic",
                                     "idleTimeoutInMinutes": 4,
                                     "ipTags": [],
                                     "ipConfiguration": {
-                                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion308_z1_name')), '/ipConfigurations/ipconfig1')]"
+                                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_appserver14_z1_name')), '/ipConfigurations/ipconfig1')]"
                                     },
                                     "deleteOption": "Detach"
                                 },
@@ -676,7 +623,7 @@
                                 }
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -690,7 +637,7 @@
                 "enableIPForwarding": false,
                 "disableTcpStateTracking": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_Bastion_nsg_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_appserver_nsg_name'))]"
                 },
                 "nicType": "Standard"
             }
@@ -698,11 +645,74 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2022-07-01",
-            "name": "[parameters('networkInterfaces_webserver603_z1_name')]",
+            "name": "[parameters('networkInterfaces_bastion492_z1_name')]",
+            "location": "northeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_bastion_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_bastion_nsg_name'))]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion492_z1_name')), '/ipConfigurations/ipconfig1')]",
+                        "etag": "W/\"ef5de0a1-5b84-466f-9b86-1199e1196e5a\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "name": "bastion-ip",
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_bastion_ip_name'))]",
+                                "properties": {
+                                    "provisioningState": "Succeeded",
+                                    "resourceGuid": "649b44b5-5086-4526-a441-c3c21ca5d883",
+                                    "publicIPAddressVersion": "IPv4",
+                                    "publicIPAllocationMethod": "Dynamic",
+                                    "idleTimeoutInMinutes": 4,
+                                    "ipTags": [],
+                                    "ipConfiguration": {
+                                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_bastion492_z1_name')), '/ipConfigurations/ipconfig1')]"
+                                    },
+                                    "deleteOption": "Detach"
+                                },
+                                "type": "Microsoft.Network/publicIPAddresses",
+                                "sku": {
+                                    "name": "Basic",
+                                    "tier": "Regional"
+                                }
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_bastion_nsg_name'))]"
+                },
+                "nicType": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-07-01",
+            "name": "[parameters('networkInterfaces_webserver641_z1_name')]",
             "location": "northeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_webserver_ip_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_webserver_nsg_name'))]"
             ],
             "kind": "Regular",
@@ -710,8 +720,8 @@
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
-                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver603_z1_name')), '/ipConfigurations/ipconfig1')]",
-                        "etag": "W/\"3c14df96-1984-4554-86cf-fb69ca57eb6e\"",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver641_z1_name')), '/ipConfigurations/ipconfig1')]",
+                        "etag": "W/\"b3eb7c7a-ff09-4f14-9f98-34a73f8f25f7\"",
                         "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
                         "properties": {
                             "provisioningState": "Succeeded",
@@ -722,13 +732,13 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_webserver_ip_name'))]",
                                 "properties": {
                                     "provisioningState": "Succeeded",
-                                    "resourceGuid": "d45b7aed-e3cd-4e94-a419-754bdd9f1252",
+                                    "resourceGuid": "43c71cce-c9a3-4e91-b750-b8f7fd54354e",
                                     "publicIPAddressVersion": "IPv4",
                                     "publicIPAllocationMethod": "Dynamic",
                                     "idleTimeoutInMinutes": 4,
                                     "ipTags": [],
                                     "ipConfiguration": {
-                                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver603_z1_name')), '/ipConfigurations/ipconfig1')]"
+                                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_webserver641_z1_name')), '/ipConfigurations/ipconfig1')]"
                                     },
                                     "deleteOption": "Detach"
                                 },
@@ -739,7 +749,7 @@
                                 }
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VirtualNetwork_name'), 'bastionsubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bastion_vnet_name'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
