@@ -195,13 +195,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_appserver_name'), '_OsDisk_1_a85861156869413db21c4129b57d5070')]",
+                        "name": "[concat('AppServer-', uniqueString(resourceGroup().id))]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
-                        "managedDisk": {
+                        /* "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_appserver_name'), '_OsDisk_1_a85861156869413db21c4129b57d5070'))]"
-                        },
+                            "id": "[resourceId('Microsoft.Compute/disks', concat('AppServer-', uniqueString(resourceGroup().id)))]"
+                        }, */
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
                     },
@@ -228,8 +228,7 @@
                         "enableVMAgentPlatformUpdates": false
                     },
                     "secrets": [],
-                    "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                    "allowExtensionOperations": true
                 },
                 "securityProfile": {
                     "uefiSettings": {
@@ -279,13 +278,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_bastion_name'), '_OsDisk_1_001eddd7236e4518b26b396027fd6477')]",
+                        "name": "[concat('BastionHost-', uniqueString(resourceGroup().id))]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
-                        "managedDisk": {
+                        /*"managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_bastion_name'), '_OsDisk_1_001eddd7236e4518b26b396027fd6477'))]"
-                        },
+                            "id": "[resourceId('Microsoft.Compute/disks', concat('BastionHost-', uniqueString(resourceGroup().id)))]"
+                        },*/
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
                     },
@@ -312,8 +311,7 @@
                         "enableVMAgentPlatformUpdates": false
                     },
                     "secrets": [],
-                    "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                    "allowExtensionOperations": true
                 },
                 "securityProfile": {
                     "uefiSettings": {
@@ -363,13 +361,13 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_1792399cf09c4c4a9f56bd628c4d2fa8')]",
+                        "name": "[concat('WebServer-', uniqueString(resourceGroup().id))]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
-                        "managedDisk": {
+                        /*"managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_1792399cf09c4c4a9f56bd628c4d2fa8'))]"
-                        },
+                            "id": "[resourceId('Microsoft.Compute/disks', concat('WebServer-', uniqueString(resourceGroup().id)))]"
+                        },*/
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
                     },
@@ -396,8 +394,7 @@
                         "enableVMAgentPlatformUpdates": false
                     },
                     "secrets": [],
-                    "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                    "allowExtensionOperations": true
                 },
                 "securityProfile": {
                     "uefiSettings": {
