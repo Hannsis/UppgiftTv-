@@ -90,6 +90,20 @@
         "networkSecurityGroups_webserver_nsg_name": {
             "defaultValue": "webserver-nsg",
             "type": "String"
+        },
+        "NginxInit": {
+            "type": "string"
+        },
+
+        "DotnetInit": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "azureuser"
+        },
+        "adminPublicKey": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -264,17 +278,18 @@
                     "dataDisks": []
                 },
                 "osProfile": {
+                    "customData": "[base64(parameters('DotnetInit'))]",
                     "computerName": "[parameters('virtualMachines_appserver_name')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
                         "ssh": {
                             "publicKeys": [
-                                {
-                                    "path": "/home/azureuser/.ssh/authorized_keys",
-                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDS/tlx6jUOMvSUGjRlP1+0DBxy1TDOoRg2zKWhFvba951bm8r4Ya6W0fNmbQ/xHTXLOsmRLbCglYvEY2NaLllHsIhM7p9xryVlND5WR3Xl94rfqc2I4EFw/8s8YzAoKfXwtGBFWU6mNXZVwYFrMHJArVFBKGbACqLDHgymzI8BIMww+eNuugcak/HFGJCEGPSl/z228F34OssOFaFvbpTc5yHE9FkYvDT8qerGx5DSVhXnH8F6TzvQ3AxD9RrS2IdchXybd/3swuisrxJ+PSjjnaW1bsxzSC836HbvYun406nio/wj4jdqzD792sfDBnUQD2uT9h05WhQ/O9B/XyEfNk+Y606ZPCoGzeW/MnfVmCjWs1lGHc88wLbY79KjGPHYi361sIstoOaPdWEq/RgOjARUCj+Lv3pD0XJLBdvn/SzUc1S+pWQfFAvIVSaryFn7jowBgKHH/EJ2Lv/8FlS/KxEJvfryd6c6ZqdGqKWkKthzEFg1WbkdUnhvPGpqPD0= generated-by-azure"
-                                }
-                            ]
+                        {
+                            "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                            "keyData": "[parameters('adminPublicKey')]"
+                        }
+                    ]
                         },
                         "provisionVMAgent": true,
                         "patchSettings": {
@@ -354,11 +369,11 @@
                         "disablePasswordAuthentication": true,
                         "ssh": {
                             "publicKeys": [
-                                {
-                                    "path": "/home/azureuser/.ssh/authorized_keys",
-                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1s35+ywMhPByD7y51TEXJFhFHsN9FfCMbfn21xl2XINx7qvHDecCNjOC7LpEOkJK0qVVo2Lf7OLzfvDXVuKe6vYvQ3YyI7M1PCCSnFlh4XOtVAUZyRUBF4tQDsTxbBZKtA1B9CUfJYA2dG7TF7KX7WZShHyy0OYmG6hIEWycy/HNprexFhmZcxH4NQRegaT9llKGZm3y/8Fkg63JrxGKVRyjaKc5oh4AG/j3P31q1LwSWcTqcHja0+uUoIotR1tNy2ebuQevucz8//rzF7Mho33+kzlH86gtoN0l+yzyKWsizo0hjJUOYAgauwwx7FpkLfr7kgAyhtC28nAzev6VozBUkpQ46Bg9XUexi9L1JzNLd4aQs7MdA8bw4uJ82XKNeV+BEt4x+wfllJYTh4SHJ9fE9XGgmMse8DYGK72M54/Y2qY/RCobr/U1bHcfxnwcU1NYogURqtmLOVykTnuuBopJdCi86eavlsmg5awcix+X0XvnfHh97vFT4Ri7ngRE= generated-by-azure"
-                                }
-                            ]
+                        {
+                            "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                            "keyData": "[parameters('adminPublicKey')]"
+                        }
+                    ]
                         },
                         "provisionVMAgent": true,
                         "patchSettings": {
@@ -432,17 +447,18 @@
                     "dataDisks": []
                 },
                 "osProfile": {
+                    "customData": "[base64(parameters('NginxInit'))]",
                     "computerName": "[parameters('virtualMachines_webserver_name')]",
                     "adminUsername": "azureuser",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
                         "ssh": {
                             "publicKeys": [
-                                {
-                                    "path": "/home/azureuser/.ssh/authorized_keys",
-                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDXEGgQ0ELGVIRK+3hDQndlnnYwoYAtYVTRr0atp2KHRW0WTdRzTWFSiYfTZ3EqBKi2NnvAZnWx3z/cmB6D1JgiVx05ujKhUV+ywjWLdfNPx7zJOu6GDmrihFv7IIcgF6ncsyxvYNtnoblR9l75VBYKzoPKwyM5nWmB+O1nJ5Yp5o3hz71eOUlma+z/XffGoDMcCJW2lmobIccGcfT4cQOamdBGaygzvoH8MupEUhAfdhqNfkKQxPboz9KBD/8S1le9OI+Plv9HjEtT5p/BfP5Gb+vQiy09DvI1rHNo4XUUL5yJr76TaZrgMNQgcHIAANS/maykhHvhdmWpDNZkIuhmQ9jgtaBdWf4iDyIh71TfYDZg3ne7gCrkzbXzoToKrRRf9RQPHBtiY/4EbFEl3GLZhCo3TlOzJuJ7YQzsn7u7GDRU1p7f9A9bPEa9LPjvYrGAE7KvZvzC737Qqv0xpuUnk1DaBuBnDdquw5r1TaF6ymDQ6qyGCq7eflY6FAvaNT0= generated-by-azure"
-                                }
-                            ]
+                        {
+                            "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                            "keyData": "[parameters('adminPublicKey')]"
+                        }
+                    ]
                         },
                         "provisionVMAgent": true,
                         "patchSettings": {
