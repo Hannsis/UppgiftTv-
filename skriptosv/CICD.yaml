@@ -25,7 +25,7 @@ jobs:
         path: ${{env.DOTNET_ROOT}}/publish
       deploy:
         runs-on: self-hosted
-        needs: Build
+        needs: build
         steps:
          - name: Download artifacts to VM
            uses: actions/download-artifact@v3
