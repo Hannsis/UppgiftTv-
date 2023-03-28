@@ -5,5 +5,5 @@ templatePath=c:/Users/89hanmad/Desktop/uppgifttvålättare/UppgiftTv-/skriptosv/
 RG=hannarg2
 deployName=DeployScript
 
-az deployment group create  --name $deployName --resource-group $RG --template-file $templatePath  
+az deployment group create  --name $deployName --resource-group $RG --template-file $templatePath --verbose
 sleep 5s

@@ -195,12 +195,12 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_appserver_name'), '_OsDisk_1_a85861156869413db21c4129b57d5070')]",
+                        "name": "[concat(parameters('virtualMachines_appserver_name'), 'diskappserver')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_appserver_name'), '_OsDisk_1_a85861156869413db21c4129b57d5070'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_appserver_name'), 'diskappserver'))]"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -229,7 +229,7 @@
                     },
                     "secrets": [],
                     "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                   // "requireGuestProvisionSignal": true
                 },
                 "securityProfile": {
                     "uefiSettings": {
@@ -279,12 +279,12 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_bastion_name'), '_OsDisk_1_001eddd7236e4518b26b396027fd6477')]",
+                        "name": "[concat(parameters('virtualMachines_bastion_name'), 'diskbastion')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_bastion_name'), '_OsDisk_1_001eddd7236e4518b26b396027fd6477'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_bastion_name'), 'diskbastion'))]"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -363,12 +363,12 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_1792399cf09c4c4a9f56bd628c4d2fa8')]",
+                        "name": "[concat(parameters('virtualMachines_webserver_name'), 'diskwebserver')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
                             "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_webserver_name'), '_OsDisk_1_1792399cf09c4c4a9f56bd628c4d2fa8'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_webserver_name'), 'diskwebserver'))]"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -397,7 +397,7 @@
                     },
                     "secrets": [],
                     "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                    //"requireGuestProvisionSignal": true
                 },
                 "securityProfile": {
                     "uefiSettings": {
