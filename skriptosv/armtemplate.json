@@ -98,7 +98,7 @@
 
         "uniquePublicIPB": "[concat(parameters('BastionName'), '-PublicIP')]",
         "uniquePublicIPW": "[concat(parameters('WebServerName'), '-PublicIP')]",
-        "uniquePublicIPA": "[concat(parameters('AppServerName'), '-PublicIP')]",
+   
 
         "uniqueVirtualNET": "[concat(resourceGroup().name, '-VNET')]",
       
@@ -170,19 +170,7 @@
             }
         }
     },
-    //behöver appservern den här delen? den ska inte ha pubic ip???
-    {
-        "name": "[variables('uniquePublicIPA')]",
-        "type": "Microsoft.Network/publicIPAddresses",
-        "apiVersion": "2020-11-01",
-        "location": "[resourceGroup().location]",
-        "properties": {
-            "publicIPAllocationMethod": "Dynamic",
-            "dnsSettings": {
-                "domainNameLabel": "[variables('DnsNameA')]"
-            }
-        }
-    },
+
 
 //NSG 
     {
@@ -317,7 +305,7 @@
         "apiVersion": "2020-11-01",
         "location": "[resourceGroup().location]",
         "dependsOn": [
-            "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'))]",
+       
             "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]",
             //"[resourceId('Microsoft.Network/virtualNetworks', variables('uniqueVirtualNET'))]",
             "[resourceId('Microsoft.Network/networkSecurityGroups', variables('uniqueNSGA'))]"
@@ -328,17 +316,11 @@
                     "name": "ipConfig1",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
-                        "publicIPAddress": {
-                            "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('uniquePublicIPA'))]"
-                        },
+                  
                         "subnet": {
                             "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
                         }
-                       /* ,"applicationSecurityGroups": [
-                                {
-                            "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]"
-                                }
-                            ]*/
+                    
                     
                     }
                 }
@@ -369,11 +351,7 @@
                         "subnet": {
                             "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('uniqueVirtualNET'), variables('uniqueSubnet'))]"
                         }
-                       /* ,"applicationSecurityGroups": [
-                                {
-                            "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', variables('uniqueASGname'))]"
-                                }
-                            ]*/
+
                     
                     }
                 }
