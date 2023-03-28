@@ -1,8 +1,8 @@
 #!bin/bash
 
 PublicKey=$(cat ~/.ssh/id_rsa.pub)
-templatePath=c:/Users/89hanmad/Desktop/uppgifttvålättare/UppgiftTv-/skriptosv/downloadtemplate.json
-RG=hannarg2
+templatePath=C:/Users/00erirun/Documents/CLO22Dev/Jaggörenny/UppgiftTwo/skriptosv/downloadtemplate.json
+RG=blobbenbob
 deployName=DeployScript
 
 az deployment group create  --name $deployName --resource-group $RG --template-file $templatePath --verbose
