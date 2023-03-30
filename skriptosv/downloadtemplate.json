@@ -95,6 +95,10 @@
         },
         "adminPublicKey": {
             "type": "string"
+        },
+         "allowBlobPublicAccess": {
+            "type": "Bool",
+            "defaultValue" : true
         }
     },
     "variables": {
@@ -114,7 +118,9 @@
         },
         "kind": "StorageV2",
         "properties": {
-          "accessTier": "Hot"
+          "accessTier": "Hot",
+          "allowBlobPublicAccess": "[parameters('allowBlobPublicAccess')]"
+
         }
       },
       {
@@ -123,7 +129,10 @@
         "name": "[format('{0}/default/{1}', variables('storageAccountName'), parameters('containerName'))]",
         "dependsOn": [
           "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-        ]
+        ],
+         "properties": {
+    "publicAccess": "blob"
+  }
       },
     
         //sshkeys

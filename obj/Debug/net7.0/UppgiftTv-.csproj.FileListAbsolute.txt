@@ -31,3 +31,4 @@ C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\obj\Debug\net7.0\Uppgif
 C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\obj\Debug\net7.0\UppgiftTv-.genruntimeconfig.cache
 C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\obj\Debug\net7.0\ref\UppgiftTv-.dll
 C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\skriptosv\downloadtemplate.json
+C:\Users\89hanmad\Desktop\uppgifttvålättare\UppgiftTv-\bin\Debug\net7.0\skriptosv\blob.json
